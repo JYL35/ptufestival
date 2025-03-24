@@ -32,15 +32,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # create application.properties
-      - name: make application.properties
-        if: contains(github.ref, 'main')
+      # create .env file
+      - name: Create .env file on EC2
         run: |
-          # spring의 resources 경로로 이동
-          cd ./src/main/resources
-          touch ./application.properties
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./application.properties
-        shell: bash
+          echo "SPRING_APPLICATION_NAME=ptufestival" > $GITHUB_WORKSPACE/.env
+          echo "SPRING_DATASOURCE_URL=${{ secrets.DB_URL }}" >> $GITHUB_WORKSPACE/.env
+          echo "SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_WORKSPACE/.env
+          echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_WORKSPACE/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_WORKSPACE/.env
 
       # gradlew 파일 실행권한 설정
       - name: Grant execute permission for gradlew
