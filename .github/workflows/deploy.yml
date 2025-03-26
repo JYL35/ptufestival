@@ -3,23 +3,20 @@ name: Deploy to Amazon EC2
 on:
   push:
     branches:
-      - main #브랜치명
+      - main
 
-# 본인이 설정한 값을 여기서 채워넣는다.
 env:
-  AWS_REGION: ap-northeast-2 #리전
+  AWS_REGION: ap-northeast-2
   PROJECT_NAME: ptufestival
-  S3_BUCKET_NAME: ptufestivalbucket #버킷 이름
-  CODE_DEPLOY_APPLICATION_NAME: ptufestival-codedeploy-app #CodeDeploy 애플리케이션 이름
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: ptufestival-codedeploy-deployment-group #CodeDeploy 배포 그룹 이름
+  S3_BUCKET_NAME: ptufestivalbucket
+  CODE_DEPLOY_APPLICATION_NAME: ptufestival-codedeploy-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: ptufestival-codedeploy-deployment-group
 
 permissions:
   contents: read
 
 jobs:
   build:
-
-    # Github의 워크플로에서 실행될 OS 선택
     runs-on: ubuntu-latest
 
     steps:
@@ -32,26 +29,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # create .env file
-      - name: Create .env file on EC2
+      - name: Export Spring environment variables
         run: |
-          echo "SPRING_APPLICATION_NAME=ptufestival" > $GITHUB_WORKSPACE/.env
-          echo "SPRING_DATASOURCE_URL=${{ secrets.DB_URL }}" >> $GITHUB_WORKSPACE/.env
-          echo "SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_WORKSPACE/.env
-          echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_WORKSPACE/.env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
 
-      # gradlew 파일 실행권한 설정
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-        shell: bash
 
-      # Gradle build (Test 제외)
       - name: Build with Gradle
-        run: ./gradlew clean --stacktrace --info build
-        shell: bash
+        run: ./gradlew clean build --stacktrace --info
 
-      # AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -59,7 +49,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # 빌드 결과물을 S3 버킷에 업로드
       - name: Upload to AWS S3
         run: |
           aws deploy push \
@@ -68,7 +57,6 @@ jobs:
             --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
             --source .
 
-      # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
       - name: Deploy to AWS EC2 from S3
         run: |
           aws deploy create-deployment \
