@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="/home/ubuntu/server"
-JAR_FILE="$PROJECT_ROOT/spring-webapp.jar"
+PROJECT_ROOT="/home/ubuntu/ptufestival"
+JAR_SOURCE=$(ls $PROJECT_ROOT/build/libs/*.jar | tail -n 1)
+JAR_TARGET="$PROJECT_ROOT/spring-webapp.jar"
 
 APP_LOG="$PROJECT_ROOT/app.log"
 ERROR_LOG="$PROJECT_ROOT/error.log"
@@ -9,29 +10,25 @@ DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
 
-# 기존 프로세스 종료 (sudo로 실행)
-echo "$TIME_NOW > 기존 Java 프로세스 확인 및 종료" >> $DEPLOY_LOG
+echo "$TIME_NOW > 기존 Java 프로세스 종료 시도" >> $DEPLOY_LOG
 sudo pkill -f "java -jar"
 sleep 3
 
-# build 파일 복사
-echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
-cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
+echo "$TIME_NOW > JAR 복사: $JAR_SOURCE -> $JAR_TARGET" >> $DEPLOY_LOG
+cp "$JAR_SOURCE" "$JAR_TARGET"
 
-# 권한 확인
 echo "$TIME_NOW > 실행 권한 부여" >> $DEPLOY_LOG
-chmod +x $JAR_FILE
+chmod +x "$JAR_TARGET"
 
-# sudo로 jar 파일 실행
-echo "$TIME_NOW > $JAR_FILE 파일 실행 (sudo 사용)" >> $DEPLOY_LOG
-sudo nohup java -jar $JAR_FILE > $APP_LOG 2>&1 &
+echo "$TIME_NOW > 애플리케이션 실행" >> $DEPLOY_LOG
+sudo nohup java -jar "$JAR_TARGET" > "$APP_LOG" 2> "$ERROR_LOG" &
 
-sleep 5  # 프로세스가 시작될 시간 부여
+sleep 5
 
-CURRENT_PID=$(pgrep -f $JAR_FILE)
+CURRENT_PID=$(pgrep -f "$JAR_TARGET")
 if [ -z "$CURRENT_PID" ]; then
-  echo "$TIME_NOW > 애플리케이션 시작 실패! 로그를 확인하세요." >> $DEPLOY_LOG
-  tail -n 50 $APP_LOG >> $DEPLOY_LOG
+  echo "$TIME_NOW > 애플리케이션 시작 실패!" >> $DEPLOY_LOG
+  tail -n 50 "$ERROR_LOG" >> $DEPLOY_LOG
 else
-  echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
+  echo "$TIME_NOW > 실행된 프로세스 PID: $CURRENT_PID" >> $DEPLOY_LOG
 fi
