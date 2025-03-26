@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT 기반 세션 없음
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll() // 로그인/회원가입 허용
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/refresh").permitAll() // 로그인/회원가입 허용
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 );
 
