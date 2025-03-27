@@ -29,12 +29,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Export Spring environment variables
+      - name: Generate application.properties
         run: |
-          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+          mkdir -p src/main/resources
+          echo "spring.application.name=ptufestival" > src/main/resources/application.properties
+          echo "spring.datasource.url=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
+          echo "spring.datasource.username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
+          echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
+          echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> src/main/resources/application.properties
+          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect" >> src/main/resources/application.properties
+          echo "jwt.secret=${{ secrets.JWT_SECRET }}" >> src/main/resources/application.properties
+          echo "jwt.expiration=3600000" >> src/main/resources/application.properties
+      
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
