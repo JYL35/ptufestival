@@ -40,10 +40,6 @@ public class NoticeController {
     public String updateNotice(
             @PathVariable("id") int id, @RequestBody NoticeRequestDto dto, @AuthenticationPrincipal User user
     ) {
-//        String accessTokenStr = request.get("accessToken");
-//        if (!noticeService.hasAccess(id, accessTokenStr)) {
-//            return "access denied";
-//        }
 
         noticeService.updateNotice(id, dto);
         return "successful updated";
@@ -53,10 +49,7 @@ public class NoticeController {
     public String deleteNotice(
             @PathVariable("id") int id, @AuthenticationPrincipal User user
     ) {
-//        String accessTokenStr = request.get("accessToken");
-//        if (!noticeService.hasAccess(id, accessTokenStr)) {
-//            return "access denied";
-//        }
+
         System.out.println(id);
         noticeService.deleteNotice(id);
         return "successful deleted";
