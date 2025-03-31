@@ -24,28 +24,28 @@ public class NoticeService {
         this.jwtUtil = jwtUtil;
     }
 
-    public Boolean hasAccess(int id, String token) {
-
-        String role = jwtUtil.extractRole(token.split(" ")[1]);
-
-        if (role.equals("admin")) {
-            return true;
-        }
-        return false;
-    }
+//    public Boolean hasAccess(int id, String token) {
+//
+//        String role = jwtUtil.extractRole(token.split(" ")[1]);
+//
+//        if (role.equals("admin")) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     // 공지사항 생성
     @Transactional
     public void createNotice(NoticeRequestDto dto) {
 
-        Notice notice = Notice.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .build();
+        Notice notice = new Notice();
+        notice.setTitle(dto.getTitle());
+        notice.setContent(dto.getContent());
 
         noticeRepository.save(notice);
     }
 
+    // 공지사항 단일 조회
     @Transactional()
     public NoticeResponseDto readNotice(int id) {
 
@@ -66,7 +66,7 @@ public class NoticeService {
         return noticeDto;
     }
 
-    // 공지사항 조회
+    // 공지사항 전체 목록 조회
     @Transactional(readOnly = true)
     public List<NoticeResponseDto> readAllNotices() {
 
