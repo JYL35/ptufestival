@@ -1,16 +1,17 @@
-package com.capstone7.ptufestival.service;
+package com.capstone7.ptufestival.notice.service;
 
-import com.capstone7.ptufestival.dto.NoticeRequestDto;
-import com.capstone7.ptufestival.dto.NoticeResponseDto;
+import com.capstone7.ptufestival.notice.dto.NoticeRequestDto;
+import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
 import com.capstone7.ptufestival.jwt.JwtUtil;
-import com.capstone7.ptufestival.model.Notice;
-import com.capstone7.ptufestival.repository.NoticeRepository;
+import com.capstone7.ptufestival.notice.entity.Notice;
+import com.capstone7.ptufestival.notice.repository.NoticeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoticeService {
@@ -48,7 +49,7 @@ public class NoticeService {
     @Transactional()
     public NoticeResponseDto readNotice(int id) {
 
-        Notice notice = noticeRepository.findById(id);
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Notice not found."));
 
         notice.setViewCount(notice.getViewCount() + 1);
         noticeRepository.save(notice);
@@ -91,7 +92,7 @@ public class NoticeService {
     @Transactional
     public void updateNotice(int id, NoticeRequestDto dto) {
 
-        Notice notice = noticeRepository.findById(id);
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Notice not found."));
 
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
