@@ -1,18 +1,13 @@
-package com.capstone7.ptufestival.controller;
+package com.capstone7.ptufestival.notice.controller;
 
-import com.capstone7.ptufestival.dto.NoticeRequestDto;
-import com.capstone7.ptufestival.dto.NoticeResponseDto;
-import com.capstone7.ptufestival.model.Notice;
+import com.capstone7.ptufestival.notice.dto.NoticeRequestDto;
+import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
 import com.capstone7.ptufestival.model.User;
-import com.capstone7.ptufestival.repository.NoticeRepository;
-import com.capstone7.ptufestival.service.NoticeService;
-import jakarta.persistence.Access;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.capstone7.ptufestival.notice.service.NoticeService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/notice")
@@ -41,7 +36,7 @@ public class NoticeController {
         return noticeService.readAllNotices();
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public String updateNotice(
             @PathVariable("id") int id, @RequestBody NoticeRequestDto dto, @AuthenticationPrincipal User user
     ) {
@@ -54,7 +49,7 @@ public class NoticeController {
         return "successful updated";
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteNotice(
             @PathVariable("id") int id, @AuthenticationPrincipal User user
     ) {

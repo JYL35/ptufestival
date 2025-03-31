@@ -1,4 +1,4 @@
-package com.capstone7.ptufestival.model;
+package com.capstone7.ptufestival.notice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
