@@ -49,7 +49,7 @@ public class NoticeService {
     @Transactional()
     public NoticeResponseDto readNotice(int id) {
 
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Notice not found."));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 id의 공지사항을 찾을 수 없습니다."));
 
         notice.setViewCount(notice.getViewCount() + 1);
         noticeRepository.save(notice);
@@ -92,7 +92,7 @@ public class NoticeService {
     @Transactional
     public void updateNotice(int id, NoticeRequestDto dto) {
 
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Notice not found."));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 id의 공지사항을 찾을 수 없습니다."));
 
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
