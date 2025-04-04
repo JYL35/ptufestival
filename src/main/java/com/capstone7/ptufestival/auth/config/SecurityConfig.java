@@ -1,7 +1,7 @@
 // config/SecurityConfig.java
-package com.capstone7.ptufestival.config;
+package com.capstone7.ptufestival.auth.config;
 
-import com.capstone7.ptufestival.jwt.JwtAuthenticationFilter;
+import com.capstone7.ptufestival.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

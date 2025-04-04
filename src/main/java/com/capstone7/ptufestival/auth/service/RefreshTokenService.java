@@ -1,9 +1,9 @@
 // service/RefreshTokenService.java
-package com.capstone7.ptufestival.service;
+package com.capstone7.ptufestival.auth.service;
 
-import com.capstone7.ptufestival.model.RefreshToken;
-import com.capstone7.ptufestival.model.User;
-import com.capstone7.ptufestival.repository.RefreshTokenRepository;
+import com.capstone7.ptufestival.auth.model.RefreshToken;
+import com.capstone7.ptufestival.auth.model.User;
+import com.capstone7.ptufestival.auth.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

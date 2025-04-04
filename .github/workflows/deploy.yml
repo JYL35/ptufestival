@@ -29,18 +29,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Generate application.properties
+      - name: Generate .env and application.properties
         run: |
-          mkdir -p src/main/resources
-          echo "spring.application.name=ptufestival" > src/main/resources/application.properties
-          echo "spring.datasource.url=${{ secrets.DB_URL }}" >> src/main/resources/application.properties
-          echo "spring.datasource.username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
-          echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
-          echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> src/main/resources/application.properties
-          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect" >> src/main/resources/application.properties
-          echo "jwt.secret=${{ secrets.JWT_SECRET }}" >> src/main/resources/application.properties
-          echo "jwt.expiration=3600000" >> src/main/resources/application.properties
-      
+          echo "${{ secrets.ENV_FILE }}" > .env
+          chmod +x ./generate-properties.sh
+          ./generate-properties.sh
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew

@@ -1,8 +1,8 @@
 // jwt/JwtAuthenticationFilter.java
-package com.capstone7.ptufestival.jwt;
+package com.capstone7.ptufestival.auth.jwt;
 
-import com.capstone7.ptufestival.model.User;
-import com.capstone7.ptufestival.repository.UserRepository;
+import com.capstone7.ptufestival.auth.model.User;
+import com.capstone7.ptufestival.auth.repository.UserRepository;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

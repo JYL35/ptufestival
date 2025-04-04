@@ -1,5 +1,5 @@
 // jwt/JwtUtil.java
-package com.capstone7.ptufestival.jwt;
+package com.capstone7.ptufestival.auth.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

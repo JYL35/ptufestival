@@ -1,12 +1,12 @@
 // service/UserService.java
-package com.capstone7.ptufestival.service;
+package com.capstone7.ptufestival.auth.service;
 
-import com.capstone7.ptufestival.dto.LoginRequestDto;
-import com.capstone7.ptufestival.dto.LoginResponseDto;
-import com.capstone7.ptufestival.dto.RegisterRequestDto;
-import com.capstone7.ptufestival.jwt.JwtUtil;
-import com.capstone7.ptufestival.model.User;
-import com.capstone7.ptufestival.repository.UserRepository;
+import com.capstone7.ptufestival.auth.dto.LoginRequestDto;
+import com.capstone7.ptufestival.auth.dto.LoginResponseDto;
+import com.capstone7.ptufestival.auth.dto.RegisterRequestDto;
+import com.capstone7.ptufestival.auth.jwt.JwtUtil;
+import com.capstone7.ptufestival.auth.model.User;
+import com.capstone7.ptufestival.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

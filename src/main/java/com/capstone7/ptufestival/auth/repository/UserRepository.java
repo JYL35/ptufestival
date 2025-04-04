@@ -1,7 +1,7 @@
-package com.capstone7.ptufestival.repository;
+package com.capstone7.ptufestival.auth.repository;
 
 
-import com.capstone7.ptufestival.model.User;
+import com.capstone7.ptufestival.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

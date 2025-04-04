@@ -1,5 +1,5 @@
 // model/RefreshToken.java
-package com.capstone7.ptufestival.model;
+package com.capstone7.ptufestival.auth.model;
 
 import jakarta.persistence.*;
 import lombok.*;

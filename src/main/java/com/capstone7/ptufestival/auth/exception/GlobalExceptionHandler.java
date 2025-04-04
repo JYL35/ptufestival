@@ -1,5 +1,5 @@
 // exception/GlobalExceptionHandler.java
-package com.capstone7.ptufestival.exception;
+package com.capstone7.ptufestival.auth.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

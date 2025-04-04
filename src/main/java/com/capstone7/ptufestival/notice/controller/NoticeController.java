@@ -1,16 +1,13 @@
 package com.capstone7.ptufestival.notice.controller;
 
 import com.capstone7.ptufestival.notice.dto.NoticeRequestDto;
-import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
-import com.capstone7.ptufestival.model.User;
+import com.capstone7.ptufestival.auth.model.User;
 import com.capstone7.ptufestival.notice.service.NoticeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/notice")

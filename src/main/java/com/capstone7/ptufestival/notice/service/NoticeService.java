@@ -2,7 +2,7 @@ package com.capstone7.ptufestival.notice.service;
 
 import com.capstone7.ptufestival.notice.dto.NoticeRequestDto;
 import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
-import com.capstone7.ptufestival.jwt.JwtUtil;
+import com.capstone7.ptufestival.auth.jwt.JwtUtil;
 import com.capstone7.ptufestival.notice.entity.Notice;
 import com.capstone7.ptufestival.notice.repository.NoticeRepository;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NoticeService {

@@ -1,5 +1,5 @@
 // dto/LoginRequestDto.java
-package com.capstone7.ptufestival.dto;
+package com.capstone7.ptufestival.auth.dto;
 
 import lombok.Getter;
 import lombok.Setter;
