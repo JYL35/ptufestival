@@ -53,13 +53,14 @@ public class SecurityConfig {
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration CorsConfiguration = new CorsConfiguration();
-        CorsConfiguration.addAllowedOrigin("http://localhost:5173");
-        CorsConfiguration.addAllowedMethod("*");
-        CorsConfiguration.addAllowedHeader("*");
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:5173");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("*", CorsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
 
         return source;
     }
