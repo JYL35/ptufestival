@@ -23,7 +23,7 @@ public class NoticeController {
     @Operation(summary = "공지사항 생성", description = "관리자 권한을 가진 클라이언트가 해당 형식의 데이터를 Body에 담아 전달해주면 공지사항을 생성해줍니다.")
     @PostMapping("/create")
     public ResponseEntity<String> createNotice(@RequestBody NoticeRequestDto dto, @AuthenticationPrincipal User user) {
-        noticeService.createNotice(dto);
+        noticeService.createNotice(dto, user);
         return ResponseEntity.ok("공지사항이 성공적으로 생성되었습니다.");
     }
 

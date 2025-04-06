@@ -17,6 +17,9 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "author_name", nullable = false, length = 100)
+    private String authorName;
+
     @Column(nullable = false)
     private String title;
 

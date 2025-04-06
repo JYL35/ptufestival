@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class NoticeResponseDto {
     private int id;
+    private String authorName;
     private String title;
     private String content;
     private LocalDateTime createdAt;

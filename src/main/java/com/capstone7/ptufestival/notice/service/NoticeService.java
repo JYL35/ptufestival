@@ -1,5 +1,6 @@
 package com.capstone7.ptufestival.notice.service;
 
+import com.capstone7.ptufestival.auth.model.User;
 import com.capstone7.ptufestival.notice.dto.NoticeRequestDto;
 import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
 import com.capstone7.ptufestival.auth.jwt.JwtUtil;
@@ -35,11 +36,12 @@ public class NoticeService {
 
     // 공지사항 생성
     @Transactional
-    public void createNotice(NoticeRequestDto dto) {
+    public void createNotice(NoticeRequestDto dto, User user) {
 
         Notice notice = new Notice();
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
+        notice.setAuthorName(user.getName());
 
         noticeRepository.save(notice);
     }
@@ -55,6 +57,7 @@ public class NoticeService {
 
         NoticeResponseDto noticeDto = NoticeResponseDto.builder()
                 .id(notice.getId())
+                .authorName(notice.getAuthorName())
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .createdAt(notice.getCreatedAt())
@@ -75,6 +78,7 @@ public class NoticeService {
         for (Notice notice : notices) {
             NoticeResponseDto noticeDto = NoticeResponseDto.builder()
                     .id(notice.getId())
+                    .authorName(notice.getAuthorName())
                     .title(notice.getTitle())
                     .content(notice.getContent())
                     .createdAt(notice.getCreatedAt())
