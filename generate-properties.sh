@@ -12,6 +12,14 @@ mkdir -p src/main/resources
 cat <<EOF > src/main/resources/application.properties
 spring.application.name=ptufestival
 
+# SSL 설정 추가
+server.port=$SERVER_PORT
+server.ssl.enabled=$SERVER_SSL_ENABLED
+server.ssl.key-store-type=$SERVER_SSL_KEY_STORE_TYPE
+server.ssl.key-store=$SERVER_SSL_KEY_STORE
+server.ssl.key-store-password=$SERVER_SSL_KEY_STORE_PASSWORD
+server.ssl.key-alias=$SERVER_SSL_KEY_ALIAS
+
 spring.datasource.url=$SPRING_DATASOURCE_URL
 spring.datasource.username=$SPRING_DATASOURCE_USERNAME
 spring.datasource.password=$SPRING_DATASOURCE_PASSWORD
