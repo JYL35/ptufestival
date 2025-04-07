@@ -29,7 +29,7 @@ public class UserService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
-                .role("USER")
+                .role("ROLE_USER")
                 .build();
 
         userRepository.save(user);

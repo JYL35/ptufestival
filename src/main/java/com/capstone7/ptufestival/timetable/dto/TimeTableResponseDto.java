@@ -1,9 +1,9 @@
 package com.capstone7.ptufestival.timetable.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
-@Setter
 @Builder
 public class TimeTableResponseDto {
     private int id;

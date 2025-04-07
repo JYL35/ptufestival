@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,25 +16,20 @@ public class TimeTableService {
 
     private final TimeTableRepository timeTableRepository;
 
-    public List<TimeTableResponseDto> getScheduleByDay(int day) {
-        return timeTableRepository.findByDayOrderByStartTimeAsc(day)
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    private TimeTableResponseDto convertToDto(TimeTable timeTable) {
+    public List<TimeTableResponseDto> getTimeTableByDay(int day) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String time = timeTable.getStartTime().format(formatter) + " ~ " + timeTable.getEndTime().format(formatter);
 
-        return TimeTableResponseDto.builder()
-                .id(timeTable.getId())
-                .eventName(timeTable.getEventName())
-                .participant(timeTable.getParticipant())
-                .day(timeTable.getDay())
-                .time(time)
-                .description(timeTable.getDescription())
-                .category(timeTable.getCategory())
-                .build();
+        return timeTableRepository.findByDay(day).stream()
+                .sorted(Comparator.comparing(TimeTable::getStartTime))
+                .map(tt -> TimeTableResponseDto.builder()
+                        .id(tt.getId())
+                        .eventName(tt.getEventName())
+                        .participant(tt.getParticipant())
+                        .day(tt.getDay())
+                        .time(tt.getStartTime().format(formatter) + " ~ " + tt.getEndTime().format(formatter))
+                        .description(tt.getDescription())
+                        .category(tt.getCategory())
+                        .build())
+                .toList();
     }
 }
