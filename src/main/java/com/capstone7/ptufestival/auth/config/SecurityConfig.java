@@ -55,6 +55,11 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:5173");
+        corsConfiguration.addAllowedOrigin("https://ptu-festival.kro.kr");
+        corsConfiguration.addAllowedOrigin("https://www.ptu-festival.kro.kr");
+        corsConfiguration.addAllowedOrigin("https://ptufestival.kro.kr");
+        corsConfiguration.addAllowedOrigin("https://www.ptufestival.kro.kr");
+        corsConfiguration.addAllowedOrigin("http://localhost:5173");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);
