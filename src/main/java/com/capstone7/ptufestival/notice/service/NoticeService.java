@@ -6,6 +6,7 @@ import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
 import com.capstone7.ptufestival.auth.jwt.JwtUtil;
 import com.capstone7.ptufestival.notice.entity.Notice;
 import com.capstone7.ptufestival.notice.repository.NoticeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,16 +25,6 @@ public class NoticeService {
         this.jwtUtil = jwtUtil;
     }
 
-//    public Boolean hasAccess(int id, String token) {
-//
-//        String role = jwtUtil.extractRole(token.split(" ")[1]);
-//
-//        if (role.equals("admin")) {
-//            return true;
-//        }
-//        return false;
-//    }
-
     // 공지사항 생성
     @Transactional
     public void createNotice(NoticeRequestDto dto, User user) {
@@ -50,7 +41,7 @@ public class NoticeService {
     @Transactional()
     public NoticeResponseDto readNotice(int id) {
 
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 id의 공지사항을 찾을 수 없습니다."));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
 
         notice.setViewCount(notice.getViewCount() + 1);
         noticeRepository.save(notice);
@@ -72,7 +63,7 @@ public class NoticeService {
     @Transactional(readOnly = true)
     public List<NoticeResponseDto> readAllNotices() {
 
-        List<Notice> notices = noticeRepository.findAll();
+        List<Notice> notices = noticeRepository.findAllByOrderByIdDesc();
         List<NoticeResponseDto> noticeDtos = new ArrayList<>();
 
         for (Notice notice : notices) {
@@ -95,7 +86,7 @@ public class NoticeService {
     @Transactional
     public void updateNotice(int id, NoticeRequestDto dto) {
 
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 id의 공지사항을 찾을 수 없습니다."));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
 
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
@@ -107,6 +98,7 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(int id) {
 
+        noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
         noticeRepository.deleteById(id);
     }
 }
