@@ -6,9 +6,11 @@ import com.capstone7.ptufestival.timetable.service.TimeTableService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -19,10 +21,17 @@ public class TimeTableController {
 
     private final TimeTableService timeTableService;
 
-    @Operation(summary = "일자별 타임테이블 조회", description = "day (1=첫째날, 2=둘째날)를 PathParam으로 전달하면 해당 날짜의 타임테이블을 조회합니다.")
-    @GetMapping("/{day}")
-    public ResponseEntity<ApiResponse<List<TimeTableResponseDto>>> getTimeTableByDay(@PathVariable("day") int day) {
-        List<TimeTableResponseDto> responseList = timeTableService.getTimeTableByDay(day);
+    @Operation(summary = "일자별 타임테이블 조회", description = "date (yyyy-MM-dd)를 PathParam으로 전달하면 해당 날짜의 타임테이블을 조회합니다.")
+    @GetMapping("/{date}")
+    public ResponseEntity<ApiResponse<List<TimeTableResponseDto>>> getTimeTableByDate(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        List<TimeTableResponseDto> responseList = timeTableService.getTimeTableByDate(date);
         return ApiResponse.success(responseList);
+    }
+
+    @Operation(summary = "현재 또는 다음 공연 조회", description = "현재 공연 중이거나 곧 시작할 다음 공연 정보를 반환합니다.")
+    @GetMapping("/now")
+    public ResponseEntity<ApiResponse<TimeTableResponseDto>> getNowOrUpcoming() {
+        TimeTableResponseDto result = timeTableService.getCurrentOrUpcoming();
+        return ApiResponse.success(result);
     }
 }

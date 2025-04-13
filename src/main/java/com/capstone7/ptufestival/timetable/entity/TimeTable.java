@@ -4,6 +4,7 @@ package com.capstone7.ptufestival.timetable.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -25,7 +26,7 @@ public class TimeTable {
     private String participant;
 
     @Column(nullable = false)
-    private int day; // 1 = 첫째날, 2 = 둘째날
+    private LocalDate eventDate;
 
     @Column(nullable = false)
     private LocalTime startTime;
