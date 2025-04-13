@@ -11,6 +11,7 @@ mkdir -p src/main/resources
 
 cat <<EOF > src/main/resources/application.properties
 spring.application.name=ptufestival
+spring.jackson.time-zone=Asia/Seoul
 
 # SSL 설정 추가
 server.port=$SERVER_PORT
