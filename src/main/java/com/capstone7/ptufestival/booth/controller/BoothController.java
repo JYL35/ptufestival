@@ -23,16 +23,14 @@ public class BoothController {
 
     @Operation(summary = "id별 부스 조회", description = "id를 Path Param로 전달하면 해당 id의 부스를 조회합니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBooth(@PathVariable int id)
-    {
+    public ResponseEntity<?> getBooth(@PathVariable int id) {
 
         return ApiResponse.success(boothService.findBooth(id));
     }
 
     @Operation(summary = "id나 theme별 부스 조회", description = "theme(푸드 | 체험 | 푸드트럭 중 하나)를 Path Param로 전달하면 해당 theme의 부스를 조회합니다.")
     @GetMapping("/theme/{theme}")
-    public ResponseEntity<?> getBoothsByTheme(@PathVariable String theme)
-    {
+    public ResponseEntity<?> getBoothsByTheme(@PathVariable String theme) {
 
         return ApiResponse.success(boothService.findBoothsByTheme(theme));
     }

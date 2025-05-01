@@ -53,6 +53,7 @@ public class BoothService {
     public BoothDetailResponseDto findBoothDetail(int id) {
 
         Booth booth = boothRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 부스를 찾을 수 없습니다."));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         BoothDetailResponseDto boothResponseDto = BoothDetailResponseDto.builder()
                 .id(booth.getId())
@@ -60,7 +61,7 @@ public class BoothService {
                 .department(booth.getDepartment())
                 .theme(booth.getTheme())
                 .description(booth.getDescription())
-                .endTime(booth.getEndTime())
+                .time(booth.getStartTime().format(formatter) + " ~ " + booth.getEndTime().format(formatter))
                 .services(booth.getServices().stream()
                         .map(BoothService::createServiceDto)
                         .collect(Collectors.toList()))

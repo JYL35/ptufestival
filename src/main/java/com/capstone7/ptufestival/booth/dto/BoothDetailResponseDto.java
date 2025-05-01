@@ -18,7 +18,6 @@ public class BoothDetailResponseDto {
     private String theme;
     private String description;
     private String location;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private String time;
     private List<ServiceDto> services;
 }
