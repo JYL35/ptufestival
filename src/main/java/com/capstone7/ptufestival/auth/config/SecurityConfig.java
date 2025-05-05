@@ -1,6 +1,7 @@
 // config/SecurityConfig.java
 package com.capstone7.ptufestival.auth.config;
 
+import com.capstone7.ptufestival.auth.handler.UnifiedAccessDeniedHandler;
 import com.capstone7.ptufestival.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UnifiedAccessDeniedHandler unifiedAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,6 +46,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/api/user/**", "/api/notice/read/**", "/api/timetable/**", "/api/booth/**","api-docs/**", "/swagger", "swagger-ui/**").permitAll()
                         .requestMatchers("/api/notice/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(unifiedAccessDeniedHandler)
+                        .authenticationEntryPoint(unifiedAccessDeniedHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // ⭐ 필터 추가
 
