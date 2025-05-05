@@ -17,8 +17,8 @@ public class BoothResponseDto {
     private String name;
     private String department;
     private String theme;
+    private String imageUrl;
     private String location;
     private String time;
     private String menu;
-
 }

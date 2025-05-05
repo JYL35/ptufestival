@@ -16,7 +16,7 @@ public class BoothDetailResponseDto {
     private String name;
     private String department;
     private String theme;
-    private String description;
+    private String imageUrl;
     private String location;
     private String time;
     private List<ServiceDto> services;
