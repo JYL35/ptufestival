@@ -21,7 +21,7 @@ echo "$TIME_NOW > 실행 권한 부여" >> $DEPLOY_LOG
 chmod +x "$JAR_TARGET"
 
 echo "$TIME_NOW > 애플리케이션 실행" >> $DEPLOY_LOG
-sudo nohup java -jar "$JAR_TARGET" > "$APP_LOG" 2> "$ERROR_LOG" &
+sudo nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_TARGET" > "$APP_LOG" 2> "$ERROR_LOG" &
 
 sleep 5
 
