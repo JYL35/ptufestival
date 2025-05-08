@@ -18,7 +18,6 @@ public class Service {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
 
-    @Column(nullable = false)
     private int price;
 
     @Column(name = "sold_out")

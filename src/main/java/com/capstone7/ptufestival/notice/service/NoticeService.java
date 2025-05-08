@@ -1,6 +1,7 @@
 package com.capstone7.ptufestival.notice.service;
 
 import com.capstone7.ptufestival.auth.model.User;
+import com.capstone7.ptufestival.common.exception.ResourceNotFoundException;
 import com.capstone7.ptufestival.notice.dto.NoticeRequestDto;
 import com.capstone7.ptufestival.notice.dto.NoticeResponseDto;
 import com.capstone7.ptufestival.auth.jwt.JwtUtil;
@@ -41,7 +42,7 @@ public class NoticeService {
     @Transactional()
     public NoticeResponseDto readNotice(int id) {
 
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
 
         notice.setViewCount(notice.getViewCount() + 1);
         noticeRepository.save(notice);
@@ -86,7 +87,7 @@ public class NoticeService {
     @Transactional
     public void updateNotice(int id, NoticeRequestDto dto) {
 
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
 
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
@@ -98,7 +99,7 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(int id) {
 
-        noticeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
+        noticeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("해당 id의 공지사항을 찾을 수 없습니다."));
         noticeRepository.deleteById(id);
     }
 }

@@ -23,6 +23,8 @@ public class Booth {
     @Column(nullable = false)
     private String theme;
 
+    private String concept;
+
     @Column(name = "image_url")
     private String imageUrl;
 
