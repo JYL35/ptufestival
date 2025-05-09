@@ -11,8 +11,13 @@ DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 TIME_NOW=$(date +%c)
 
 echo "$TIME_NOW > 기존 Java 프로세스 종료 시도" >> $DEPLOY_LOG
-sudo pkill -f "java -jar"
+sudo pkill -f "$JAR_TARGET"
 sleep 3
+
+if [ ! -f "$JAR_SOURCE" ]; then
+  echo "$TIME_NOW > JAR 파일이 존재하지 않아 복사 실패!" >> $DEPLOY_LOG
+  exit 1
+fi
 
 echo "$TIME_NOW > JAR 복사: $JAR_SOURCE -> $JAR_TARGET" >> $DEPLOY_LOG
 cp "$JAR_SOURCE" "$JAR_TARGET"
@@ -31,4 +36,5 @@ if [ -z "$CURRENT_PID" ]; then
   tail -n 50 "$ERROR_LOG" >> $DEPLOY_LOG
 else
   echo "$TIME_NOW > 실행된 프로세스 PID: $CURRENT_PID" >> $DEPLOY_LOG
+  ps -ef | grep "$CURRENT_PID" | grep java >> $DEPLOY_LOG
 fi

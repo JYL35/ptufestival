@@ -15,4 +15,9 @@ else
   echo "$TIME_NOW > 실행 중인 PID $CURRENT_PID 종료" >> $DEPLOY_LOG
   kill -15 "$CURRENT_PID"
   sleep 3
+
+  if ps -p "$CURRENT_PID" > /dev/null; then
+    echo "$TIME_NOW > 정상 종료 실패, 강제 종료 시도" >> $DEPLOY_LOG
+    kill -9 "$CURRENT_PID"
+  fi
 fi

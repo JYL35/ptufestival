@@ -19,6 +19,10 @@ permissions:
 
 #배포 이후에 실행할 일련의 라이프사이클
 hooks:
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 60
+      runas: ubuntu
   AfterInstall:
     - location: scripts/stop.sh
       timeout: 60
