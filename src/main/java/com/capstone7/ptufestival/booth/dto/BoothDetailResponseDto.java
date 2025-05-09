@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -16,6 +15,7 @@ public class BoothDetailResponseDto {
     private String name;
     private String department;
     private String theme;
+    private String concept;
     private String imageUrl;
     private String location;
     private String time;

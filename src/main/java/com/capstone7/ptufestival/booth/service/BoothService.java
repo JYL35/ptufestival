@@ -6,7 +6,7 @@ import com.capstone7.ptufestival.booth.dto.ServiceDto;
 import com.capstone7.ptufestival.booth.entity.Booth;
 import com.capstone7.ptufestival.booth.repository.BoothRepository;
 import com.capstone7.ptufestival.booth.entity.Service;
-import jakarta.persistence.EntityNotFoundException;
+import com.capstone7.ptufestival.common.exception.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
@@ -25,7 +25,7 @@ public class BoothService {
     @Transactional(readOnly = true)
     public BoothResponseDto findBooth(int id) {
 
-        Booth booth = boothRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 부스를 찾을 수 없습니다."));
+        Booth booth = boothRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("해당 id의 부스를 찾을 수 없습니다."));
         BoothResponseDto boothResponseDto = createBoothDto(booth);
 
         return boothResponseDto;
@@ -34,10 +34,10 @@ public class BoothService {
     @Transactional(readOnly = true)
     public List<BoothResponseDto> findBoothsByTheme(String theme) {
 
-        List<Booth> booths = boothRepository.findByTheme(theme);
+        List<Booth> booths = boothRepository.findByThemeContaining(theme);
 
         if (booths.isEmpty()) {
-            throw new EntityNotFoundException("해당 theme의 부스를 찾을 수 없습니다.");
+            throw new ResourceNotFoundException("해당 theme의 부스를 찾을 수 없습니다.");
         }
 
         List<BoothResponseDto> boothResponseDtos = new ArrayList<>();
@@ -52,7 +52,7 @@ public class BoothService {
     @Transactional(readOnly = true)
     public BoothDetailResponseDto findBoothDetail(int id) {
 
-        Booth booth = boothRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id의 부스를 찾을 수 없습니다."));
+        Booth booth = boothRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("해당 id의 부스를 찾을 수 없습니다."));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         BoothDetailResponseDto boothResponseDto = BoothDetailResponseDto.builder()
@@ -60,6 +60,7 @@ public class BoothService {
                 .name(booth.getName())
                 .department(booth.getDepartment())
                 .theme(booth.getTheme())
+                .concept(booth.getConcept())
                 .imageUrl(booth.getImageUrl())
                 .time(booth.getStartTime().format(formatter) + " ~ " + booth.getEndTime().format(formatter))
                 .services(booth.getServices().stream()
