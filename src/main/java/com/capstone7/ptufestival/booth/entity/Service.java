@@ -18,7 +18,8 @@ public class Service {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
 
-    private int price;
+    @Column(nullable = false)
+    private String price;
 
     @Column(name = "sold_out")
     private Boolean soldOut;
