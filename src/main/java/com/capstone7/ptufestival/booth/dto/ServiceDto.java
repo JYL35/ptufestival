@@ -12,7 +12,7 @@ import lombok.Setter;
 public class ServiceDto {
     private int id;
     private String serviceName;
-    private int price;
+    private String price;
     private Boolean soldOut;
 
 }
