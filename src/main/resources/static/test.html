@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE 테스트</title>
+</head>
+<body>
+<h1>긴급 공지 수신 대기 중...</h1>
+<script>
+    const sse = new EventSource("http://localhost:8080/api/notification/connect");
+
+    sse.addEventListener("notification", function(event) {
+        const data = JSON.parse(event.data);
+        alert("공지! " + data.title + "\n" + data.description);
+    });
+
+    sse.onerror = function(error) {
+        console.error("SSE 연결 오류", error);
+    };
+</script>
+</body>
+</html>

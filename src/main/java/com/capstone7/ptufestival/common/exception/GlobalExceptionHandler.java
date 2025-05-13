@@ -2,6 +2,7 @@
 package com.capstone7.ptufestival.common.exception;
 
 import com.capstone7.ptufestival.common.dto.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleInternalServerError(Exception e) {
+    public ResponseEntity<ApiResponse<Object>> handleInternalServerError(
+            Exception e,
+            HttpServletRequest request
+    ) {
+        String acceptHeader = request.getHeader("Accept");
+
+        if ("text/event-stream".equalsIgnoreCase(acceptHeader)) {
+            // SSE 요청은 빈 응답
+            return ResponseEntity.noContent().build();  // 204
+        }
+
         return ApiResponse.error("서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

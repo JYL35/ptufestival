@@ -43,8 +43,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/user/**", "/api/notice/read/**", "/api/timetable/**", "/api/booth/**","api-docs/**", "/swagger", "swagger-ui/**").permitAll()
-                        .requestMatchers("/api/notice/**").hasRole("ADMIN")
+                        .requestMatchers("/api/notice/create", "/api/notice/update/**", "/api/notice/delete/**",
+                                "/api/notification/send").hasRole("ADMIN")
+                        .requestMatchers("/api/user/me").authenticated()
+                        .requestMatchers("/api/auth/**", "/api/notification/connect", "/api/notice/read/**",
+                                "/api/timetable/**", "/api/booth/**","/api-docs/**", "/swagger", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
@@ -65,7 +68,6 @@ public class SecurityConfig {
         corsConfiguration.addAllowedOrigin("https://www.ptu-festival.kro.kr");
         corsConfiguration.addAllowedOrigin("https://ptufestival.kro.kr");
         corsConfiguration.addAllowedOrigin("https://www.ptufestival.kro.kr");
-        corsConfiguration.addAllowedOrigin("http://localhost:5173");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);

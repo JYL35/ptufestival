@@ -7,6 +7,7 @@ build/
 
 # application.properties 파일을 git에서 제외
 src/main/resources/application.properties
+src/main/resources/static/test.html
 
 ### STS ###
 .apt_generated
