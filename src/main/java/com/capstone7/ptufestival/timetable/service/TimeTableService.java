@@ -27,31 +27,55 @@ public class TimeTableService {
                 .toList();
     }
 
-    // ✅ 현재 or 다가오는 공연 반환
-    public TimeTableResponseDto getCurrentOrUpcoming() {
+    public List<TimeTableResponseDto> getNowAndNext() {
         LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
+        LocalTime time = LocalTime.now();
 
-        // 현재 공연 중
-        Optional<TimeTable> current = timeTableRepository
-                .findFirstByEventDateAndStartTimeBeforeAndEndTimeAfter(today, now, now);
-        if (current.isPresent()) return toDto(current.get(), "current");
+        TimeTableResponseDto nowDto = null;
+        TimeTableResponseDto nextDto = null;
 
-        // 오늘의 다음 공연
-        Optional<TimeTable> upcomingToday = timeTableRepository
-                .findFirstByEventDateAndStartTimeAfterOrderByStartTimeAsc(today, now);
-        if (upcomingToday.isPresent()) return toDto(upcomingToday.get(), "upcoming");
+        Optional<TimeTable> now = timeTableRepository
+                .findFirstByEventDateAndStartTimeBeforeAndEndTimeAfter(today, time, time);
 
-        // 이후 날짜의 가장 빠른 공연
-        Optional<TimeTable> upcomingFuture = timeTableRepository
-                .findFirstByEventDateAfterOrderByEventDateAscStartTimeAsc(today);
-        if (upcomingFuture.isPresent()) return toDto(upcomingFuture.get(), "upcoming");
+        if (now.isPresent()) {
+            nowDto = toDto(now.get(), "now");
+        }
 
-        return null;
+        Optional<TimeTable> next = timeTableRepository
+                .findFirstByEventDateAndStartTimeAfterOrderByStartTimeAsc(today, time);
+
+        if (next.isEmpty()) {
+            next = timeTableRepository.findFirstByEventDateAfterOrderByEventDateAscStartTimeAsc(today);
+        }
+
+        if (next.isPresent()) {
+            // 현재 공연이 있으면 중복 방지
+            if (nowDto == null || next.get().getId() != now.get().getId()) {
+                nextDto = toDto(next.get(), "next");
+            }
+        }
+
+        // 무조건 2개 반환: now, next 순서
+        return List.of(
+                nowDto != null ? nowDto : toDto(null, null),
+                nextDto != null ? nextDto : toDto(null, null)
+        );
     }
 
-    // 🔁 TimeTable → DTO 변환 (type은 "current" or "upcomming" 또는 null)
     private TimeTableResponseDto toDto(TimeTable tt, String type) {
+        if (tt == null) {
+            return TimeTableResponseDto.builder()
+                    .id(0)
+                    .eventName("")
+                    .participant("")
+                    .eventDate("")
+                    .time("")
+                    .description("")
+                    .category("")
+                    .type(type)
+                    .build();
+        }
+
         return TimeTableResponseDto.builder()
                 .id(tt.getId())
                 .eventName(tt.getEventName())

@@ -28,10 +28,10 @@ public class TimeTableController {
         return ApiResponse.success(responseList);
     }
 
-    @Operation(summary = "현재 또는 다음 공연 조회", description = "현재 공연 중이거나 곧 시작할 다음 공연 정보를 반환합니다.")
+    @Operation(summary = "현재 또는 다음 공연 조회", description = "현재 공연 중이면 현재 + 다음 공연, 아니면 다음 공연만 반환합니다.")
     @GetMapping("/now")
-    public ResponseEntity<ApiResponse<TimeTableResponseDto>> getNowOrUpcoming() {
-        TimeTableResponseDto result = timeTableService.getCurrentOrUpcoming();
+    public ResponseEntity<ApiResponse<List<TimeTableResponseDto>>> getNowAndNext() {
+        List<TimeTableResponseDto> result = timeTableService.getNowAndNext();
         return ApiResponse.success(result);
     }
 }
