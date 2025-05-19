@@ -19,14 +19,34 @@ public class NotificationService {
     // 현재 연결된 클라이언트 저장
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
-    public SseEmitter createEmitter() {
-        SseEmitter emitter = new SseEmitter(0L); // 무제한 연결 유지
-        String emitterId = UUID.randomUUID().toString();
-        emitters.put(emitterId, emitter);
+    public SseEmitter createEmitter(String clientId) {
+        // 기존 emitter가 있다면 제거
+        if (emitters.containsKey(clientId)) {
+            SseEmitter oldEmitter = emitters.get(clientId);
+            oldEmitter.complete();
+            emitters.remove(clientId);
+            System.out.println("[SSE 재연결] 기존 emitter 제거: " + clientId);
+        }
 
-        emitter.onCompletion(() -> emitters.remove(emitterId));
-        emitter.onTimeout(() -> emitters.remove(emitterId));
-        emitter.onError(e -> emitters.remove(emitterId));
+        // 새로운 emitter 생성
+        SseEmitter emitter = new SseEmitter(3 * 60 * 1000L); // 3분 유지
+        emitters.put(clientId, emitter);
+        System.out.println("[SSE 연결] emitter 등록: " + clientId);
+
+        emitter.onCompletion(() -> {
+            emitters.remove(clientId);
+            System.out.println("[SSE 완료] emitter 제거됨: " + clientId);
+        });
+
+        emitter.onTimeout(() -> {
+            emitters.remove(clientId);
+            System.out.println("[SSE 타임아웃] emitter 제거됨: " + clientId);
+        });
+
+        emitter.onError(e -> {
+            emitters.remove(clientId);
+            System.out.println("[SSE 에러] emitter 제거됨: " + clientId);
+        });
 
         return emitter;
     }
@@ -42,5 +62,10 @@ public class NotificationService {
                 log.warn("SSE 전송 실패 (ID: {}): {}", id, e.getMessage());
             }
         });
+    }
+
+    // Discord 알림용
+    public int getEmitterCount() {
+        return emitters.size();
     }
 }

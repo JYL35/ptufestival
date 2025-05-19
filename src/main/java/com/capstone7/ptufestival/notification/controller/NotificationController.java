@@ -23,8 +23,10 @@ public class NotificationController {
 
     @Operation(summary = "SSE 연결", description = "클라이언트가 접속 시 SSE 연결을 맺습니다.")
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter connect() {
-        return notificationService.createEmitter();
+    public ResponseEntity<SseEmitter> connect(@RequestParam("clientId") String clientId) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .body(notificationService.createEmitter(clientId));
     }
 
     @Operation(summary = "알림 전송", description = "관리자 권한을 가진 클라이언트가 알림을 전송합니다.")
