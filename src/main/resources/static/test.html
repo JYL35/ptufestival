@@ -7,16 +7,24 @@
 <body>
 <h1>긴급 공지 수신 대기 중...</h1>
 <script>
-    const sse = new EventSource("http://localhost:8080/api/notification/connect");
+    document.addEventListener("DOMContentLoaded", function () {
+        let clientId = localStorage.getItem("clientId");
+        if (!clientId) {
+            clientId = crypto.randomUUID();  // 고유 ID 생성
+            localStorage.setItem("clientId", clientId);
+        }
 
-    sse.addEventListener("notification", function(event) {
-        const data = JSON.parse(event.data);
-        alert("공지! " + data.title + "\n" + data.description);
+        const sse = new EventSource("http://localhost:8080/api/notification/connect?clientId=" + clientId);
+
+        sse.addEventListener("notification", function (event) {
+            const data = JSON.parse(event.data);
+            alert("공지! " + data.title + "\n" + data.description);
+        });
+
+        sse.onerror = function (error) {
+            console.error("SSE 연결 오류", error);
+        };
     });
-
-    sse.onerror = function(error) {
-        console.error("SSE 연결 오류", error);
-    };
 </script>
 </body>
 </html>

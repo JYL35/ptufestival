@@ -1,5 +1,6 @@
 package com.capstone7.ptufestival.notification.service;
 
+import com.capstone7.ptufestival.common.discord.DiscordNotifier;
 import com.capstone7.ptufestival.notification.dto.NotificationRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -18,6 +18,7 @@ public class NotificationService {
 
     // 현재 연결된 클라이언트 저장
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final DiscordNotifier discordNotifier;
 
     public SseEmitter createEmitter(String clientId) {
         // 기존 emitter가 있다면 제거
@@ -52,20 +53,30 @@ public class NotificationService {
     }
 
     public void sendToAll(NotificationRequestDto dto) {
-        emitters.forEach((id, emitter) -> {
+        int successCount = 0;
+        int failCount = 0;
+
+        for (Map.Entry<String, SseEmitter> entry : emitters.entrySet()) {
+            String id = entry.getKey();
+            SseEmitter emitter = entry.getValue();
             try {
                 emitter.send(SseEmitter.event()
                         .name("notification")
-                        .data(dto)); // ApiResponse 없이 바로 dto 전송
+                        .data(dto));
+                successCount++;
             } catch (IOException e) {
                 emitter.completeWithError(e);
-                log.warn("SSE 전송 실패 (ID: {}): {}", id, e.getMessage());
+                emitters.remove(id);
+                failCount++;
             }
-        });
+        }
+
+        String message = String.format("[📢 공지 전송] 제목: '%s', 전달 성공: %d명, 실패: %d명", dto.getTitle(), successCount, failCount);
+        discordNotifier.sendToDiscord(message);
     }
 
-    // Discord 알림용
-    public int getEmitterCount() {
-        return emitters.size();
+    public void getEmitterCount() {
+        int count = emitters.size();
+        discordNotifier.sendToDiscord("[🔔 접속 중인 사용자 수(SSE)] " + count + "명");
     }
 }

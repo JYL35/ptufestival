@@ -36,6 +36,8 @@ springdoc.default-consumes-media-type=application/json
 springdoc.default-produces-media-type=application/json
 springdoc.swagger-ui.enabled=true
 springdoc.swagger-ui.disable-swagger-default-url=true
+
+discord.token=$DISCORD_TOKEN
 EOF
 
 echo "✅ application.properties 생성 완료!"

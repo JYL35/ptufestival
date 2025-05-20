@@ -35,4 +35,11 @@ public class NotificationController {
         notificationService.sendToAll(dto);
         return ApiResponse.success("알림이 전송되었습니다.");
     }
+
+    @Operation(summary = "현재 접속자 수", description = "SSE 기준 현재 접속자 수를 Discord 알림으로 전송합니다.")
+    @GetMapping(value = "/sse-count")
+    public ResponseEntity<?> sendSseCount() {
+        notificationService.getEmitterCount();
+        return ApiResponse.success("디스코드 알림이 전송되었습니다.");
+    }
 }

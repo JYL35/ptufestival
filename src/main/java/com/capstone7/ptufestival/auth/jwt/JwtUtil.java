@@ -1,5 +1,6 @@
 package com.capstone7.ptufestival.auth.jwt;
 
+import com.capstone7.ptufestival.auth.model.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class JwtUtil {
         this.expiration = expiration;
     }
 
-    public String generateToken(String username, String role, Long id) {
+    public String generateToken(String username, Role role, Long id) {
         ZonedDateTime nowKST = ZonedDateTime.now(KOREA_ZONE);
         Date issuedAt = Date.from(nowKST.toInstant());
         Date expiryAt = Date.from(nowKST.plus(Duration.ofMillis(expiration)).toInstant());

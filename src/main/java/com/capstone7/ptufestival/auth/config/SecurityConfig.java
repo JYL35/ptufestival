@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/notice/create", "/api/notice/update/**", "/api/notice/delete/**",
                                 "/api/notification/send").hasRole("ADMIN")
                         .requestMatchers("/api/user/me").authenticated()
-                        .requestMatchers("/api/auth/**", "/api/notification/connect", "/api/notice/read/**",
+                        .requestMatchers("/test.html", "/api/auth/**", "/api/notification/connect", "/api/notification/sse-count", "/api/notice/read/**",
                                 "/api/timetable/**", "/api/booth/**","/api-docs/**", "/swagger", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )

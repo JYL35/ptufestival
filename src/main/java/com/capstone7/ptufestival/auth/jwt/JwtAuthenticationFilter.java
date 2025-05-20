@@ -88,8 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             @Override
             public String getAuthority() {
-
-                return user.getRole();
+                return "ROLE_" + user.getRole().name();
             }
         });
 
