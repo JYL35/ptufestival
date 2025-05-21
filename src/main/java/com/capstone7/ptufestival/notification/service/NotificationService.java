@@ -37,16 +37,37 @@ public class NotificationService {
         emitter.onCompletion(() -> {
             emitters.remove(clientId);
             System.out.println("[SSE 완료] emitter 제거됨: " + clientId);
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("close")
+                        .data("204 No Content"));
+            } catch (IOException e) {
+                System.out.println("[SSE 완료] 204 전송 실패: " + e.getMessage());
+            }
         });
 
         emitter.onTimeout(() -> {
             emitters.remove(clientId);
             System.out.println("[SSE 타임아웃] emitter 제거됨: " + clientId);
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("close")
+                        .data("204 No Content"));
+            } catch (IOException e) {
+                System.out.println("[SSE 타임아웃] 204 전송 실패: " + e.getMessage());
+            }
         });
 
         emitter.onError(e -> {
             emitters.remove(clientId);
             System.out.println("[SSE 에러] emitter 제거됨: " + clientId);
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("close")
+                        .data("204 No Content"));
+            } catch (IOException e2) {
+                System.out.println("[SSE 에러] 204 전송 실패: " + e2.getMessage());
+            }
         });
 
         return emitter;
