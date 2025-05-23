@@ -26,27 +26,27 @@ public class NotificationService {
             SseEmitter oldEmitter = emitters.get(clientId);
             oldEmitter.complete();
             emitters.remove(clientId);
-            System.out.println("[SSE 재연결] 기존 emitter 제거: " + clientId);
+            log.info("[SSE 재연결] 기존 emitter 제거: {}", clientId);
         }
 
         // 새로운 emitter 생성
         SseEmitter emitter = new SseEmitter(3 * 60 * 1000L); // 3분 유지
         emitters.put(clientId, emitter);
-        System.out.println("[SSE 연결] emitter 등록: " + clientId);
+        log.info("[SSE 연결] emitter 등록: {}", clientId);
 
         emitter.onCompletion(() -> {
             emitters.remove(clientId);
-            System.out.println("[SSE 완료] emitter 제거됨: " + clientId);
+            log.info("[SSE 완료] emitter 제거됨: {}", clientId);
         });
 
         emitter.onTimeout(() -> {
             emitters.remove(clientId);
-            System.out.println("[SSE 타임아웃] emitter 제거됨: " + clientId);
+            log.info("[SSE 타임아웃] emitter 제거됨: {}", clientId);
         });
 
         emitter.onError(e -> {
             emitters.remove(clientId);
-            System.out.println("[SSE 에러] emitter 제거됨: " + clientId);
+            log.error("[SSE 에러] emitter 제거됨: {}", clientId, e);
         });
 
         return emitter;
@@ -68,15 +68,18 @@ public class NotificationService {
                 emitter.completeWithError(e);
                 emitters.remove(id);
                 failCount++;
+                log.error("[SSE 전송 실패] 클라이언트 ID: {}", id, e);
             }
         }
 
         String message = String.format("[📢 공지 전송] 제목: '%s', 전달 성공: %d명, 실패: %d명", dto.getTitle(), successCount, failCount);
         discordNotifier.sendToDiscord(message);
+        log.info(message);
     }
 
     public void getEmitterCount() {
-        int count = emitters.size();
-        discordNotifier.sendToDiscord("[🔔 접속 중인 사용자 수(SSE)] " + count + "명");
+        String message = String.format("[🔔 접속 중인 사용자 수(SSE)] %d명", emitters.size());
+        discordNotifier.sendToDiscord(message);
+        log.info(message);
     }
 }
